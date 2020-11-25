@@ -2,7 +2,7 @@
   "name": "qt-messenger-server-app",
   "version": "1.0.0",
   "scripts": {
-    "start": "node ./script.js"
+    "start": "node script.js"
   },
   "dependencies": {
     "socket.io": "^2.0.4"
