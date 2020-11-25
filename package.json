@@ -1,15 +1,11 @@
 {
-  "name": "frost-chat",
+  "name": "Chatlinker",
   "version": "1.0.0",
   "description": "A real-time chat app using WebSockets.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/therj/frost-chat.git"
   },
   "author": "",
   "license": "ISC",
