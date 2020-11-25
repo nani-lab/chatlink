@@ -1,5 +1,5 @@
 //Create  connection
-var socket = io.connect("http://localhost:8080");
+var socket = io.connect("https://chatlinker.heroku.com:3000");
 
 //Query DOM
 var message = document.querySelector("#message");
