@@ -1,4 +1,4 @@
-const io = require('socket.io')(process.env.PORT);
+const io = require('socket.io')(process.env.PORT || 3000);
 //stats
 let numUsers = 0;
 let idRoom = 2;
