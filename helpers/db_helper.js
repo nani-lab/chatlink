@@ -7,14 +7,14 @@ class Helper {
 
         this.pool = mysql.createPool({
             connectionLimit: 100,
-            /* host: '148.66.145.4',
+            host: '148.66.145.4',
             user: 'qw_user',
             password: 'Qwick@123',
-            database: 'qw_db', */
-            host: 'localhost',
+            database: 'qw_db',
+           /* host: 'localhost',
             user: 'root',
             password: '',
-            database: 'touch',
+            database: 'touch', */
 
             debug: false
         });
