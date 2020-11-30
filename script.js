@@ -1,4 +1,5 @@
 const io = require('socket.io')(process.env.PORT || 3000);
+const helper = require('./helpers/db_helper');
 //stats
 let numUsers = 0;
 let idRoom = 2;
@@ -177,12 +178,31 @@ io.on('connection', socket => {
         console.log(message);
         // socket.nsp.to(data.user).emit('new message', message);
         // socket.broadcast.in(data.user).emit('new message', message);
+        helper.saveMessage(message,data.user,data.senderType,data.receiverId,data.receiverType,(result)=>{
+            if (result.error) {
+                response.status(100).json({ "error": true,"message": "Error in connection database" });
+            }else if(result.rows.length === 0){
+                response.status(404).json({ "error": true,"message": "No result Found" });
+            }else{
+                response.status(200).json(result);
+            }
+        });
+
         socket.emit('message', {msg: message.text, user: message.user, createdAt: new Date()});    
     
     });
     
     socket.on('send-message', (message) => {
         console.log(message);
+        helper.saveMessage(message.text,1,message.senderType,2,message.receiverType,(result)=>{
+            if (result.error) {
+                response.status(100).json({ "error": true,"message": "Error in connection database" });
+            }else if(result.rows.length === 0){
+                response.status(404).json({ "error": true,"message": "No result Found" });
+            }else{
+                response.status(200).json(result);
+            }
+        });
         // connectedUsers['1'].emit('something', 'something');
         io.emit('message', {msg: message.text, user: message.user, createdAt: new Date()});    
     });
@@ -212,3 +232,6 @@ io.on('connection', socket => {
 
     });
 });
+
+
+ 
