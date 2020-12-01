@@ -27,7 +27,7 @@ class Helper {
         } */
         this.pool.getConnection((err, connection) => {
             console.log("INSERT INTO chat_messages(messages,senderId,senderType,receiverId,receiverType,createdDate) VALUES('"+message+"','"+senderId+"','"+senderType+"','"+receiverId+"','"+receiverType+"','"+currentDate+"')");
-            connection.query("INSERT INTO chat_messages(messages,sender_id,sender_type,receiver_id,receiver_type,created_at) VALUES('"+message+"','"+senderId+"','"+senderType+"','"+receiverId+"','"+receiverType+"','"+currentDate+"')", (err, rows) => {
+            connection.query("INSERT INTO chat_messages(messages,sender_id,sender_type,receiver_id,receiver_type) VALUES('"+message+"','"+senderId+"','"+senderType+"','"+receiverId+"','"+receiverType+"')", (err, rows) => {
                 /* if (!err) {
                     callback({"error":false,"rows":rows});
                 } */
