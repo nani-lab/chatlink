@@ -6,6 +6,6 @@
   },
   "dependencies": {
     "mysql": "^2.18.1",
-    "socket.io": "^3.0.3"
+    "socket.io": "^2.3.0"
   }
 }
