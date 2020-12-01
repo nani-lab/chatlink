@@ -5,6 +5,7 @@
     "start": "node ./script.js"
   },
   "dependencies": {
+    "mysql": "^2.18.1",
     "socket.io": "^2.0.4"
   }
 }
