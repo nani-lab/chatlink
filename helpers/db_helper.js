@@ -12,7 +12,7 @@ class Helper {
             user: 'qw_user',
             password: 'Qwick@123',
             database: 'qw_db',
-
+            debug : true
  
 
     });
@@ -30,7 +30,7 @@ class Helper {
             user: 'qw_user',
             password: 'Qwick@123',
             database: 'qw_db',
-            debug: false
+            debug: true
         });
     }
 
@@ -40,8 +40,8 @@ class Helper {
             callback({ "error": true });
         } */
         this.pool.getConnection((err, connection) => {
-            console.log("INSERT INTO chat_messages(messages,sender_id,sender_type,receiver_id,receiver_type) VALUES('"+message+"','"+senderId+"','"+senderType+"','"+receiverId+"','"+receiverType+"')");
-            connection.query("INSERT INTO chat_messages(messages,sender_id,sender_type,receiver_id,receiver_type) VALUES('"+message+"','"+senderId+"','"+senderType+"','"+receiverId+"','"+receiverType+"')", (err, rows) => {
+            console.log("INSERT INTO chat_messages(messages,sender_id,sender_type,receiver_id,receiver_type,created_at) VALUES('"+message+"','"+senderId+"','"+senderType+"','"+receiverId+"','"+receiverType+"','"+currentDate+"')");
+            connection.query("INSERT INTO chat_messages(messages,sender_id,sender_type,receiver_id,receiver_type,created_at) VALUES('"+message+"','"+senderId+"','"+senderType+"','"+receiverId+"','"+receiverType+"','"+currentDate+"')", (err, rows) => {
                 /* if (!err) {
                     callback({"error":false,"rows":rows});
                 } */
