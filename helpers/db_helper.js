@@ -5,6 +5,24 @@ class Helper {
 
     constructor() {
         
+        var con = mysql.createConnection({
+  
+            host: '148.66.145.4',
+            port: '3306',
+            user: 'qw_user',
+            password: 'Qwick@123',
+            database: 'qw_db',
+
+ 
+
+    });
+
+ 
+
+     con.connect(function(err) {
+        if (err)  console.log(err);
+        console.log("Connected!");
+     });
         this.pool = mysql.createPool({
             connectionLimit: 100,
             host: '148.66.145.4',
