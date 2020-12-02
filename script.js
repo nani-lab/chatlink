@@ -46,7 +46,7 @@ io.on('connection', socket => {
         console.log(user);
       }
     socket.on('add-user', userId => {
-      socket.user_id = userId;
+     // socket.user_id = userId;
       connectedUsers[userId] = socket;
     });
     socket.on('add user', username => {
