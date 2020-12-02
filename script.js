@@ -220,7 +220,9 @@ io.on('connection', socket => {
  response.status(200).json(result);
  }
  });
+      if(message != undefined && message.sernderId != undefined && message.receiverId != undefined && connectedUsers[message.receiverId] != undefined) {          
  connectedUsers[message.receiverId].emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: new Date()});
+      }
  // io.emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: new Date()}); 
  });
     socket.on('start typing', roomId => {
