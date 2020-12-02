@@ -221,7 +221,7 @@ io.on('connection', socket => {
  response.status(200).json(result);
  }
  });
-                 console.log(connectedUsers.find(m => m.userId == message.receiverId).socket.user_id);
+                
       if(message != undefined && message.sernderId != undefined && message.receiverId != undefined &&  connectedUsers.find(m => m.userId == message.receiverId) != undefined) {   
                 console.log(message.receiverId+'-------------------------->');
                
