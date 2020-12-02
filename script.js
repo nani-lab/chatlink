@@ -46,7 +46,7 @@ io.on('connection', socket => {
         console.log(user);
       }
     socket.on('add-user', userId => {
-     // socket.user_id = userId;
+      socket.user_id = userId;
       connectedUsers.push({'userId': userId, 'socket': socket});
     });
     socket.on('add user', username => {
@@ -220,6 +220,7 @@ io.on('connection', socket => {
  response.status(200).json(result);
  }
  });
+                 console.log(connectedUsers.find(m => m.userId == message.receiverId).userId+'----------userid>');
       if(message != undefined && message.sernderId != undefined && message.receiverId != undefined &&  connectedUsers.find(m => m.userId == message.receiverId) != undefined) {   
                 console.log(message.receiverId+'-------------------------->');
                
