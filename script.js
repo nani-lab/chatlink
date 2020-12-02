@@ -36,10 +36,10 @@ var connectedUsers = {};
 
 
 io.on('connection', socket => {
-    // console.log(socket.client.request);
-    // console.log(socket.handshake.headers['origin']);
-    connectedUsers['1'] = socket;
-    // console.log(connectedUsers);
+   console.log(socket.client.request);
+   console.log(socket.handshake.headers['origin']);
+   connectedUsers['2'] = socket;
+   console.log(connectedUsers);
     if(typeof socket.handshake.name!="undefined"){
        var user = {
           name : socket.handshake.query.name,
