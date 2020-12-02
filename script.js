@@ -194,7 +194,7 @@ io.on('connection', socket => {
     
     socket.on('send-message', (message) => {
         console.log(message);
-        helper.saveMessage(message.text,1,message.senderType,2,message.receiverType,(result)=>{
+        helper.saveMessage(message.text,message.senderId,message.senderType,message.receiverId,message.receiverType,(result)=>{
             if (result.error) {
                 response.status(100).json({ "error": true,"message": "Error in connection database" });
             }else if(result.rows.length === 0){
