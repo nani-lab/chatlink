@@ -2,49 +2,24 @@
 const mysql = require('mysql');
 
 class Helper {
+    constructor() {}
 
-    constructor() {
-        
-
-        this.pool = mysql.createPool({
-            connectionLimit: 100,
+    saveMessage(message, senderId, senderType, receiverId, receiverType){
+        var connection = mysql.createConnection({
             host: '148.66.145.4',
             port: '3306',
             user: 'qw_user',
             password: 'Qwick@123',
             database: 'qw_db',
-            /* host: 'localhost',
-            user: 'root',
-            password: '',
-            database: 'touch',
- */
-            debug: false
+            timezone: 'utc'
         });
-        console.log(this.pool);
-    }
-
-    saveMessage(message, senderId, senderType, receiverId, receiverType){
-        const currentDate = new Date();
-        /* if (err) {
-            callback({ "error": true });
-        } */
-        this.pool.getConnection((err, connection) => {
-            console.log("INSERT INTO chat_messages(messages,sender_id,sender_type,receiver_id,receiver_type,created_at) VALUES('"+message+"','"+senderId+"','"+senderType+"','"+receiverId+"','"+receiverType+"','"+currentDate+"')");
-            connection.query("INSERT INTO chat_messages(messages,sender_id,sender_type,receiver_id,receiver_type,created_at) VALUES('"+message+"','"+senderId+"','"+senderType+"','"+receiverId+"','"+receiverType+"','"+currentDate+"')", (err, rows) => {
-               connection.release();
-                /* if (!err) {
-                    callback({"error":false,"rows":rows});
-                } */
-            });
-
-            connection.on('error',  (err) => {
-                console.log(err);
-                callback({ "error": true });
-                
-            });
+        connection.connect();
+        const currentDate = new Date(); 
+            // console.log("INSERT INTO chat_messages(messages,sender_id,sender_type,receiver_id,receiver_type,created_at) VALUES('"+message+"','"+senderId+"','"+senderType+"','"+receiverId+"','"+receiverType+"','"+currentDate+"')");
+        connection.query("INSERT INTO chat_messages(messages,sender_id,sender_type,receiver_id,receiver_type,created_at) VALUES('"+message+"','"+senderId+"','"+senderType+"','"+receiverId+"','"+receiverType+"',UTC_TIMESTAMP())", (err, rows) => {
+           // logs     
         });
+        connection.end();
     }
-
 }
-
 module.exports = new Helper();
