@@ -31,7 +31,7 @@ let messages = {'1':[]};
          "user_id" : 1, //if 0 is server send message type
           }]
 }*/
-var connectedUsers = {}; 
+var connectedUsers = []; 
 
 
 
@@ -47,7 +47,7 @@ io.on('connection', socket => {
       }
     socket.on('add-user', userId => {
      // socket.user_id = userId;
-      connectedUsers[userId] = socket;
+      connectedUsers.push({'userId': userId, 'socket': socket});
     });
     socket.on('add user', username => {
         console.log('connection ' + username);
@@ -220,9 +220,10 @@ io.on('connection', socket => {
  response.status(200).json(result);
  }
  });
-      if(message != undefined && message.sernderId != undefined && message.receiverId != undefined && connectedUsers[message.receiverId] != undefined) {   
+      if(message != undefined && message.sernderId != undefined && message.receiverId != undefined &&  connectedUsers.find(m => m.userId == message.receiverId) != undefined) {   
                 console.log(message.receiverId+'-------------------------->');
- connectedUsers[message.receiverId].emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: new Date()});
+               
+  connectedUsers.find(m => m.userId == message.receiverId).socket.emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: new Date()});
       }
  // io.emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: new Date()}); 
  });
