@@ -36,7 +36,7 @@ var connectedUsers = {};
 
 
 io.on('connection', socket => {
-    console.log(JSON.stringify(socket));
+  //  console.log(JSON.stringify(socket));
     if(typeof socket.handshake.name!="undefined"){
        var user = {
           name : socket.handshake.query.name,
