@@ -204,7 +204,7 @@ io.on('connection', socket => {
             }
         });
         // connectedUsers['1'].emit('something', 'something');
-        socket.emit('message', {msg: message.text, user: message.user, createdAt: new Date()});    
+        io.emit('message', {msg: message.text, user: message.user, createdAt: new Date()});    
     });
     socket.on('start typing', roomId => {
         socket.broadcast.to(roomId).emit('new typing', socket.user_id);
