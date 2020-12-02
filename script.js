@@ -45,7 +45,10 @@ io.on('connection', socket => {
         }
         console.log(user);
       }
-
+    socket.on('add-user', userId => {
+      socket.user_id = userId;
+      connectedUsers[userId] = socket;
+    });
     socket.on('add user', username => {
         console.log('connection ' + username);
 
@@ -206,6 +209,20 @@ io.on('connection', socket => {
 
     
     });
+       socket.on('send-message1', (message) => {
+ console.log(message);
+ helper.saveMessage(message.text,message.senderId,message.senderType,message.receiverId,message.receiverType,(result)=>{
+ if (result.error) {
+ response.status(100).json({ "error": true,"message": "Error in connection database" });
+ }else if(result.rows.length === 0){
+ response.status(404).json({ "error": true,"message": "No result Found" });
+ }else{
+ response.status(200).json(result);
+ }
+ });
+ connectedUsers[message.receiverId].emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: new Date()});
+ // io.emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: new Date()}); 
+ });
     socket.on('start typing', roomId => {
         socket.broadcast.to(roomId).emit('new typing', socket.user_id);
     });
