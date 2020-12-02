@@ -47,6 +47,7 @@ io.on('connection', socket => {
       }
     socket.on('add-user', userId => {
       socket.user_id = userId;
+      if(!connectedUsers.find(m=>m.userId == userId))
       connectedUsers.push({'userId': userId, 'socket': socket});
     });
     socket.on('add user', username => {
