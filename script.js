@@ -220,7 +220,8 @@ io.on('connection', socket => {
  response.status(200).json(result);
  }
  });
-      if(message != undefined && message.sernderId != undefined && message.receiverId != undefined && connectedUsers[message.receiverId] != undefined) {          
+      if(message != undefined && message.sernderId != undefined && message.receiverId != undefined && connectedUsers[message.receiverId] != undefined) {   
+                console.log(message.receiverId+'-------------------------->');
  connectedUsers[message.receiverId].emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: new Date()});
       }
  // io.emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: new Date()}); 
