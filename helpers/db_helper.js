@@ -37,7 +37,9 @@ class Helper {
             });
 
             connection.on('error',  (err) => {
+                console.log(err);
                 callback({ "error": true });
+                
             });
         });
     }
