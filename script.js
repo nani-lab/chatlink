@@ -31,24 +31,28 @@ let messages = {'1':[]};
          "user_id" : 1, //if 0 is server send message type
           }]
 }*/
-var connectedUsers = []; 
+var connectedUsers = {}; 
 
 
 
 io.on('connection', socket => {
+    socket.emit('connected', socket.id);
   //  console.log(JSON.stringify(socket));
-    if(typeof socket.handshake.name!="undefined"){
-       var user = {
-          name : socket.handshake.query.name,
-          id : socket.handshake.query.id,
-          email : socket.handshake.query.email,
-        }
-        console.log(user);
-      }
+    // if(typeof socket.handshake.name!="undefined"){
+    //    var user = {
+    //       name : socket.handshake.query.name,
+    //       id : socket.handshake.query.id,
+    //       email : socket.handshake.query.email,
+    //     }
+    //     console.log(user);
+    //   }
     socket.on('add-user', userId => {
-      socket.user_id = userId;
-      if(!connectedUsers.find(m=>m.userId == userId))
-      connectedUsers.push({'userId': userId, 'socket': socket});
+        if(userId) {
+            socket.user_id = userId;
+            connectedUsers[userId] = socket;
+            console.log('Added: ' + socket.user_id );
+            // console.log(connectedUsers[userId]);
+        }
     });
     socket.on('add user', username => {
         console.log('connection ' + username);
@@ -210,23 +214,22 @@ io.on('connection', socket => {
 
     
     });
-       socket.on('send-message1', (message) => {
- console.log(message);
- helper.saveMessage(message.text,message.senderId,message.senderType,message.receiverId,message.receiverType,(result)=>{
- if (result.error) {
- response.status(100).json({ "error": true,"message": "Error in connection database" });
- }else if(result.rows.length === 0){
- response.status(404).json({ "error": true,"message": "No result Found" });
- }else{
- response.status(200).json(result);
- }
- });
+    socket.on('send-message1', (message) => {
+            console.log(message);
+            helper.saveMessage(message.text,message.senderId,message.senderType,message.receiverId,message.receiverType,(result)=>{
+            if (result.error) {
+            response.status(100).json({ "error": true,"message": "Error in connection database" });
+            }else if(result.rows.length === 0){
+            response.status(404).json({ "error": true,"message": "No result Found" });
+            }else{
+            response.status(200).json(result);
+            }
+            });
                 
-      if(message != undefined && message.sernderId != undefined && message.receiverId != undefined &&  connectedUsers.find(m => m.userId == message.receiverId) != undefined) {   
-                console.log(message.receiverId+'-------------------------->');
-               
-  connectedUsers.find(m => m.userId == message.receiverId).socket.emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: new Date()});
-      }
+     if(message.senderId!= undefined && message.receiverId != undefined && connectedUsers[message.receiverId] != undefined) {
+        console.log(connectedUsers[message.receiverId].user_id);
+   connectedUsers[message.receiverId].emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: new Date()});
+     }
  // io.emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: new Date()}); 
  });
     socket.on('start typing', roomId => {
