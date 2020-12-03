@@ -210,7 +210,7 @@ io.on('connection', socket => {
         });
         // connectedUsers['1'].emit('something', 'something');
         //io.emit('message', {msg: message.text, user: message.user, createdAt: new Date()}); 
-        io.emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: new Date()}); 
+        //socket.emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: new Date()}); 
 
     
     });
