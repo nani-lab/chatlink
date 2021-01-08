@@ -45,6 +45,7 @@ io.on('connection', socket => {
             
             //get all clients (sockets) of recipient
             let recipientSocketIds = userSocketIdMap.get(message.receiverId);
+            console.log(message.receiverId);
             console.log(recipientSocketIds);
             if(recipientSocketIds != undefined && recipientSocketIds.length > 0) {
                 for (let recipientSocket of recipientSocketIds) {
