@@ -84,6 +84,7 @@ io.on('connection', socket => {
 //
 function addClientToMap(userId, usersDeviceSocket){
     if (!userSocketIdMap.has(userId)) {
+        console.log(userId);
     //when user is joining first time
     userSocketIdMap.set(userId, usersDeviceSocket);
     } else{
