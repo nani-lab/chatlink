@@ -19,6 +19,7 @@ io.on('connection', socket => {
             // console.log(soket.id);
             //add client to online users list
             addClientToMap(userId, userSocket);
+            console.log(userSocketIdMap.get(userId));
             // console.log('Added: ' + socket.user_id );
             // console.log(connectedUsers[userId]);
         }
