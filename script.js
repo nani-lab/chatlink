@@ -5,7 +5,7 @@ var connectedUsers = {};
 class ConnectedUser {
     constructor(id, userSocket) {
         this.id = id;
-        this.uSockets.push(userSocket);
+        this.uSockets = userSocket;
     }
 }
 class ConnectedUsers {
