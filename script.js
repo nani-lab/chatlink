@@ -12,14 +12,14 @@ io.on('connection', socket => {
     socket.emit('connected', socket.id);
     /*--------------------------New User - Start---------------------------*/
     // when user added, store the socket information in connectedUsers
-    socket.on('add-user', (userId, userSocket) => {
-        if(userId) {
-            socket.user_id = userId;
-            connectedUsers[userId] = socket;
+    socket.on('add-user', (clientInfo) => {
+        if(clientInfo) {
+            socket.user_id = clientInfo.userId;
+            connectedUsers[clientInfo.userId] = socket;
             // console.log(soket.id);
             //add client to online users list
-            addClientToMap(userId, userSocket);
-            console.log(userSocketIdMap.get(userId));
+            addClientToMap(clientInfo.userId, clientInfo.userSocket);
+            console.log(userSocketIdMap.get(clientInfo.userId));
             // console.log('Added: ' + socket.user_id );
             // console.log(connectedUsers[userId]);
         }
@@ -84,7 +84,7 @@ io.on('connection', socket => {
 //
 function addClientToMap(userId, usersDeviceSocket){
     if (!userSocketIdMap.has(userId)) {
-        console.log('if'+ JSON.stringify(userId));
+        console.log('if'+ userId);
     //when user is joining first time
     userSocketIdMap.set(userId, usersDeviceSocket);
     } else{
