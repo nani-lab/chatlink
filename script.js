@@ -19,7 +19,7 @@ io.on('connection', socket => {
             connectedUsers[clientInfo.userId] = socket;
             
             map.set('1', 'str1');  
-            console.log(map.get('1'))
+           
             // console.log(soket.id);
             //add client to online users list
             addClientToMap(clientInfo.userId, clientInfo.userSocket);
@@ -47,7 +47,7 @@ io.on('connection', socket => {
             // console.log(connectedUsers[message.receiverId].user_id);
             var cstTimeNow = moment().tz('America/Chicago').format('D MMM YYYY, h:mm a');
             // connectedUsers[message.receiverId].emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: cstTimeNow});
-            
+             console.log(map.get('1'));
             //get all clients (sockets) of recipient
             let recipientSocketIds = userSocketIdMap.get(message.receiverId);
             console.log(message.receiverId);
