@@ -4,19 +4,21 @@ var moment = require('moment-timezone');
 var connectedUsers = {}; 
 
 const userSocketIdMap = new Map(); //a map of online usernames and their clients
+
+
 // socket connection
 io.on('connection', socket => {
     // if connected, emit to socket saying connected with the socket.id
     socket.emit('connected', socket.id);
     /*--------------------------New User - Start---------------------------*/
     // when user added, store the socket information in connectedUsers
-    socket.on('add-user', userId => {
+    socket.on('add-user', (userId, userSocket) => {
         if(userId) {
             socket.user_id = userId;
             connectedUsers[userId] = socket;
             // console.log(soket.id);
             //add client to online users list
-            addClientToMap(userId, socket);
+            addClientToMap(userId, userSocket.id);
             // console.log('Added: ' + socket.user_id );
             // console.log(connectedUsers[userId]);
         }
@@ -45,9 +47,9 @@ io.on('connection', socket => {
             let recipientSocketIds = userSocketIdMap.get(message.receiverId);
             console.log(recipientSocketIds);
             if(recipientSocketIds != undefined && recipientSocketIds.length > 0) {
-                 for (let recipientSocket of recipientSocketIds) {
-                  recipientSocket.emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: cstTimeNow});
-                 }
+                for (let recipientSocket of recipientSocketIds) {
+                    io.to(recipientSocket).emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: cstTimeNow});
+                }
             }
         }
     });
@@ -72,10 +74,9 @@ io.on('connection', socket => {
 
         console.log('deconnection');
         //remove this client from online list
-        removeClientFromMap(userId, socket.id);
+        // removeClientFromMap(userId, socket.id);
     });
 });
-
 
 
 //
@@ -84,8 +85,7 @@ function addClientToMap(userId, usersDeviceSocket){
     //when user is joining first time
     userSocketIdMap.set(userId, new Set([usersDeviceSocket]));
     } else{
-    //user had already joined from one client and now joining using another
-   // client
+    //user had already joined from one client and now joining using another client
     userSocketIdMap.get(userId).add(usersDeviceSocket);
     }
 }
@@ -94,8 +94,7 @@ function removeClientFromMap(userId, usersDeviceSocket){
     if (userSocketIdMap.has(userId)) {
     let userSocketIdSet = userSocketIdMap.get(userId);
     userSocketIdSet.delete(usersDeviceSocket);
-    //if there are no clients for a user, remove that user from online
-    list (map)
+    //if there are no clients for a user, remove that user from online list (map)
     if (userSocketIdSet.size ==0 ) {
     userSocketIdMap.delete(userId);
     }
