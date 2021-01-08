@@ -84,11 +84,12 @@ io.on('connection', socket => {
 //
 function addClientToMap(userId, usersDeviceSocket){
     if (!userSocketIdMap.has(userId)) {
-        console.log(userId);
+        console.log('if'+userId);
     //when user is joining first time
     userSocketIdMap.set(userId, usersDeviceSocket);
     } else{
     //user had already joined from one client and now joining using another client
+       console.log('else'+userId);
     userSocketIdMap.get(userId).add(usersDeviceSocket);
     }
 }
