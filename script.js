@@ -47,7 +47,7 @@ io.on('connection', socket => {
             // console.log(connectedUsers[message.receiverId].user_id);
             var cstTimeNow = moment().tz('America/Chicago').format('D MMM YYYY, h:mm a');
             // connectedUsers[message.receiverId].emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: cstTimeNow});
-             console.log(map.get('1'));
+             console.log(map.get(message.receiverId));
             //get all clients (sockets) of recipient
            // let recipientSocketIds = userSocketIdMap.get(message.receiverId);
            // console.log(message.receiverId);
@@ -86,17 +86,17 @@ io.on('connection', socket => {
 
 
 //
-function addClientToMap(userId, usersDeviceSocket){
+function addClientToMap(userId: number, usersDeviceSocket: string){
     if (!userSocketIdMap.has(userId)) {
-        console.log('if'+ userId);
+       // console.log('if'+ userId);
     //when user is joining first time
    // userSocketIdMap.set(userId, usersDeviceSocket);
-         map.set('1', 'str1');  
+         map.set(userId, 'str1');  
     } else{
     //user had already joined from one client and now joining using another client
        console.log('else'+userId);
         //userSocketIdMap.get(userId).add(userId, usersDeviceSocket);
-         map.get('1').add('1', 'str2');  
+         map.get(userId).add(userId, 'str2');  
     }
 }
 
