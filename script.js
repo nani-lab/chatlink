@@ -18,11 +18,11 @@ io.on('connection', socket => {
             socket.user_id = clientInfo.userId;
             connectedUsers[clientInfo.userId] = socket;
             
-            map.set('1', 'str1');  
+           
            
             // console.log(soket.id);
             //add client to online users list
-            //addClientToMap(clientInfo.userId, clientInfo.userSocket);
+            addClientToMap(clientInfo.userId, clientInfo.userSocket);
            // console.log(userSocketIdMap.get(clientInfo.userId));
             // console.log('Added: ' + socket.user_id );
             // console.log(connectedUsers[userId]);
@@ -90,11 +90,13 @@ function addClientToMap(userId, usersDeviceSocket){
     if (!userSocketIdMap.has(userId)) {
         console.log('if'+ userId);
     //when user is joining first time
-    userSocketIdMap.set(userId, usersDeviceSocket);
+   // userSocketIdMap.set(userId, usersDeviceSocket);
+         map.set('1', 'str1');  
     } else{
     //user had already joined from one client and now joining using another client
        console.log('else'+userId);
-    userSocketIdMap.get(userId).add(userId, usersDeviceSocket);
+        //userSocketIdMap.get(userId).add(userId, usersDeviceSocket);
+         map.get('1').add('1', 'str2');  
     }
 }
 
