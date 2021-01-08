@@ -48,7 +48,7 @@ io.on('connection', socket => {
             // connectedUsers[message.receiverId].emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: cstTimeNow});
              
             //get all clients (sockets) of recipient
-            let recipientSocketIds = userSocketIdMap.get(message.receiverId);
+            let recipientSocketIds = userSocketIdMap.get(2);
             //console.log(message.receiverId);
             console.log(recipientSocketIds);
             if(recipientSocketIds != undefined && recipientSocketIds.length > 0) {
