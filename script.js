@@ -3,6 +3,7 @@ const helper = require('./helpers/db_helper');
 var moment = require('moment-timezone');
 var connectedUsers = {}; 
 
+const userSocketIdMap = new Map(); //a map of online usernames and their clients
 // socket connection
 io.on('connection', socket => {
     // if connected, emit to socket saying connected with the socket.id
@@ -13,6 +14,9 @@ io.on('connection', socket => {
         if(userId) {
             socket.user_id = userId;
             connectedUsers[userId] = socket;
+            console.log(soket.id);
+            //add client to online users list
+            addClientToMap(userId, socket.id);
             // console.log('Added: ' + socket.user_id );
             // console.log(connectedUsers[userId]);
         }
@@ -34,7 +38,13 @@ io.on('connection', socket => {
         if(message.senderId!= undefined && message.receiverId != undefined && connectedUsers[message.receiverId] != undefined) {
             // console.log(connectedUsers[message.receiverId].user_id);
             var cstTimeNow = moment().tz('America/Chicago').format('D MMM YYYY, h:mm a');
-            connectedUsers[message.receiverId].emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: cstTimeNow});
+            // connectedUsers[message.receiverId].emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: cstTimeNow});
+            
+            //get all clients (socketIds) of recipient
+            let recipientSocketIds = userSocketIdMap.get(message.receiverId);
+            for (let socketId of recipientSocketIds) {
+                io.to(socketId).emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: cstTimeNow});
+            }
         }
     });
     socket.on('start typing', roomId => {
@@ -57,12 +67,33 @@ io.on('connection', socket => {
     socket.on('disconnect', () => {
 
         console.log('deconnection');
-       // numUsers--;
-
-
-
+        //remove this client from online list
+        removeClientFromMap(userName, socket.id);
     });
 });
 
 
- 
+
+//
+function addClientToMap(userName, socketId){
+    if (!userSocketIdMap.has(userName)) {
+    //when user is joining first time
+    userSocketIdMap.set(userName, new Set([socketId]));
+    } else{
+    //user had already joined from one client and now joining using another
+    client
+    userSocketIdMap.get(userName).add(socketId);
+    }
+}
+
+function removeClientFromMap(userName, socketId){
+    if (userSocketIdMap.has(userName)) {
+    let userSocketIdSet = userSocketIdMap.get(userName);
+    userSocketIdSet.delete(socketID);
+    //if there are no clients for a user, remove that user from online
+    list (map)
+    if (userSocketIdSet.size ==0 ) {
+    userSocketIdMap.delete(userName);
+    }
+    }
+}
