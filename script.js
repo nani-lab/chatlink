@@ -4,7 +4,7 @@ var moment = require('moment-timezone');
 var connectedUsers = {}; 
 
 const userSocketIdMap = new Map(); //a map of online usernames and their clients
-let map = new Map();
+
 
 
 // socket connection
@@ -23,7 +23,6 @@ io.on('connection', socket => {
             // console.log(soket.id);
             //add client to online users list
             addClientToMap(clientInfo.userId, clientInfo.userSocket);
-            console.log(map.get(clientInfo.userId));
             // console.log('Added: ' + socket.user_id );
             // console.log(connectedUsers[userId]);
         }
@@ -47,16 +46,16 @@ io.on('connection', socket => {
             // console.log(connectedUsers[message.receiverId].user_id);
             var cstTimeNow = moment().tz('America/Chicago').format('D MMM YYYY, h:mm a');
             // connectedUsers[message.receiverId].emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: cstTimeNow});
-             console.log(map.get(message.receiverId));
+             
             //get all clients (sockets) of recipient
-           // let recipientSocketIds = userSocketIdMap.get(message.receiverId);
-           // console.log(message.receiverId);
-            //console.log(recipientSocketIds);
-            //if(recipientSocketIds != undefined && recipientSocketIds.length > 0) {
-                //for (let recipientSocket of recipientSocketIds) {
-                   // io.to(recipientSocket).emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: cstTimeNow});
-               // }
-            //}
+            let recipientSocketIds = userSocketIdMap.get(message.receiverId);
+            //console.log(message.receiverId);
+            console.log(recipientSocketIds);
+            if(recipientSocketIds != undefined && recipientSocketIds.length > 0) {
+                for (let recipientSocket of recipientSocketIds) {
+                    io.to(recipientSocket).emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: cstTimeNow});
+                }
+            }
         }
     });
     socket.on('start typing', roomId => {
@@ -90,13 +89,11 @@ function addClientToMap(userId, usersDeviceSocket){
     if (!userSocketIdMap.has(userId)) {
        // console.log('if'+ userId);
     //when user is joining first time
-   // userSocketIdMap.set(userId, usersDeviceSocket);
-         map.set(userId, usersDeviceSocket);  
+    userSocketIdMap.set(userId, usersDeviceSocket);
     } else{
     //user had already joined from one client and now joining using another client
-       console.log('else'+userId);
-        //userSocketIdMap.get(userId).add(userId, usersDeviceSocket);
-         map.get(userId).add(userId, usersDeviceSocket);  
+      // console.log('else'+userId);
+        userSocketIdMap.get(userId).add(userId, usersDeviceSocket);
     }
 }
 
