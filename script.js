@@ -22,7 +22,7 @@ io.on('connection', socket => {
            
             // console.log(soket.id);
             //add client to online users list
-            addClientToMap(clientInfo.userId, clientInfo.userSocket);
+            addClientToMap(clientInfo.userId.tostring(), clientInfo.userSocket);
             // console.log('Added: ' + socket.user_id );
             // console.log(connectedUsers[userId]);
         }
@@ -48,7 +48,7 @@ io.on('connection', socket => {
             // connectedUsers[message.receiverId].emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: cstTimeNow});
              
             //get all clients (sockets) of recipient
-            let recipientSocketIds = userSocketIdMap.get(message.receiverId);
+            let recipientSocketIds = userSocketIdMap.get(message.receiverId.toString());
             //console.log(message.receiverId);
             console.log(recipientSocketIds);
             if(recipientSocketIds != undefined && recipientSocketIds.length > 0) {
@@ -93,7 +93,7 @@ function addClientToMap(userId, usersDeviceSocket){
     } else if(userSocketIdMap.get(userId) != undefined){
     //user had already joined from one client and now joining using another client
       // console.log('else'+userId);
-        userSocketIdMap.get(userId).add(userId, usersDeviceSocket);
+        userSocketIdMap.get(userId.toString).add(userId, usersDeviceSocket);
     }
 }
 
