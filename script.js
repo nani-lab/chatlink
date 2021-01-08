@@ -98,7 +98,7 @@ function addClientToMap(userId, usersDeviceSocket){
 }
 
 function removeClientFromMap(userId, usersDeviceSocket){
-    if (userSocketIdMap.has(userId)) {
+    if (userSocketIdMap.has(userId.toString())) {
     let userSocketIdSet = userSocketIdMap.get(userId);
     userSocketIdSet.delete(usersDeviceSocket);
     //if there are no clients for a user, remove that user from online list (map)
