@@ -88,14 +88,15 @@ io.on('connection', socket => {
 
 //
 function addClientToMap(userId, usersDeviceSocket){
-    if (!userSocketIdMap.has(userId)) {
+    var udId = userId.toString();
+    if (!userSocketIdMap.has(udId)) {
        // console.log('if'+ userId);
     //when user is joining first time
-    userSocketIdMap.set(userId, usersDeviceSocket);
-    } else if(userSocketIdMap.get(userId) != undefined){
+    userSocketIdMap.set(udId, usersDeviceSocket);
+    } else if(userSocketIdMap.get(udId) != undefined){
     //user had already joined from one client and now joining using another client
       // console.log('else'+userId);
-        userSocketIdMap.get(userId).add(userId, usersDeviceSocket);
+        userSocketIdMap.get(udId).add(udId, usersDeviceSocket);
     }
 }
 
