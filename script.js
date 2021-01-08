@@ -90,7 +90,7 @@ function addClientToMap(userId, usersDeviceSocket){
     } else{
     //user had already joined from one client and now joining using another client
        console.log('else'+userId);
-    userSocketIdMap.get(userId).add(usersDeviceSocket);
+    userSocketIdMap.get(userId).set(usersDeviceSocket);
     }
 }
 
