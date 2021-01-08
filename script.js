@@ -13,7 +13,7 @@ io.on('connection', socket => {
         if(userId) {
             socket.user_id = userId;
             // connectedUsers[userId] = socket;
-            connectedUsers[userId].push(socket);
+            connectedUsers[userId]?.push(socket);
             // console.log('Added: ' + socket.user_id );
             // console.log(connectedUsers[userId]);
         }
