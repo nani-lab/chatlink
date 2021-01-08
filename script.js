@@ -41,7 +41,7 @@ io.on('connection', socket => { console.log(socket);
             socket.user_id = userId;
             connectedUsers[userId] = socket;
             _connectedUsers.newUser(userId, socket);
-            console.log(_connectedUsers.allConnectedUsers());
+           // console.log(_connectedUsers.allConnectedUsers());
             // console.log('Added: ' + socket.user_id );
             // console.log(connectedUsers[userId]);
         }
