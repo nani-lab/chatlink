@@ -1,19 +1,47 @@
 const io = require('socket.io')(process.env.PORT || 3000);
 const helper = require('./helpers/db_helper');
 var moment = require('moment-timezone');
-var connectedUsers = {}; 
+var connectedUsers = {};
+class ConnectedUser {
+    constructor(id, userSocket) {
+        this.id = id;
+        this.uSockets.push(userSocket);
+    }
+}
+class ConnectedUsers {
+    constructor(){
+      this.users = []
+    }
+    // create a new user and save it in the collection
+    newUser(id, userSocket){
+      let p = new ConnectedUser(id, userSocket)
+    //   console.log(JSON.stringify(p.uSockets));
+      this.users.push(p)
+      return p;
+    }
+    get allConnectedUsers(){
+      return this.users
+    }
 
+    get numberOfConnectedUsers(){
+        return this.users.length;
+    }
+}  
+
+let _connectedUsers = new ConnectedUsers();
 // socket connection
-io.on('connection', socket => {
+io.on('connection', socket => { console.log(socket);
     // if connected, emit to socket saying connected with the socket.id
     socket.emit('connected', socket.id);
     /*--------------------------New User - Start---------------------------*/
     // when user added, store the socket information in connectedUsers
     socket.on('add-user', userId => {
         if(userId) {
+            console.log(userId);
             socket.user_id = userId;
-            // connectedUsers[userId] = socket;
-            connectedUsers[userId]?.push(socket);
+            connectedUsers[userId] = socket;
+            _connectedUsers.newUser(userId, socket);
+            console.log(_connectedUsers.allConnectedUsers());
             // console.log('Added: ' + socket.user_id );
             // console.log(connectedUsers[userId]);
         }
@@ -30,15 +58,17 @@ io.on('connection', socket => {
             }else{
             response.status(200).json(result);
             }
-            });
+             });
                 
-        if(message.senderId!= undefined && message.receiverId != undefined && connectedUsers[message.receiverId] != undefined) {
+        if(message.senderId!= undefined && message.receiverId != undefined 
+            // && multipleConnectedUsers.userId != message.receiverId) {
+            && connectedUsers[message.receiverId] != undefined) {
             // console.log(connectedUsers[message.receiverId].user_id);
             var cstTimeNow = moment().tz('America/Chicago').format('D MMM YYYY, h:mm a');
-            //connectedUsers[message.receiverId].emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: cstTimeNow});
-            connectedUsers[message.receiverId].foreach(m=> {
-                m.emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: cstTimeNow});
-            });
+            connectedUsers[message.receiverId].emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: cstTimeNow});
+            // connectedUsers[message.receiverId].foreach(m=> {
+            //     m.emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: cstTimeNow});
+            // });
         }
     });
     socket.on('start typing', roomId => {
