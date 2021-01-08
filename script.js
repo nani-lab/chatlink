@@ -75,11 +75,11 @@ io.on('connection', socket => {
     });
 
     // when the user disconnects.. perform this
-    socket.on('disconnect', (userId) => {
+    socket.on('disconnect', (clientInfo) => {
 
         console.log('deconnection');
         //remove this client from online list
-        // removeClientFromMap(userId, socket.id);
+        removeClientFromMap(clientInfo.userId, clientInfo.userSocket);
     });
 });
 
