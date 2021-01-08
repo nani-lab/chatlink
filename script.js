@@ -91,12 +91,12 @@ function addClientToMap(userId, usersDeviceSocket){
        // console.log('if'+ userId);
     //when user is joining first time
    // userSocketIdMap.set(userId, usersDeviceSocket);
-         map.set(userId, 'str1');  
+         map.set(userId, usersDeviceSocket);  
     } else{
     //user had already joined from one client and now joining using another client
        console.log('else'+userId);
         //userSocketIdMap.get(userId).add(userId, usersDeviceSocket);
-         map.get(userId).add(userId, 'str2');  
+         map.get(userId).add(userId, usersDeviceSocket);  
     }
 }
 
