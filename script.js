@@ -4,6 +4,7 @@ var moment = require('moment-timezone');
 var connectedUsers = {}; 
 
 const userSocketIdMap = new Map(); //a map of online usernames and their clients
+let map = new Map();
 
 
 // socket connection
@@ -16,6 +17,9 @@ io.on('connection', socket => {
         if(clientInfo) {
             socket.user_id = clientInfo.userId;
             connectedUsers[clientInfo.userId] = socket;
+            
+            map.set('1', 'str1');  
+            console.log(map.get('1'))
             // console.log(soket.id);
             //add client to online users list
             addClientToMap(clientInfo.userId, clientInfo.userSocket);
