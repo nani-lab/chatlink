@@ -85,7 +85,7 @@ function addClientToMap(userId, usersDeviceSocket){
     userSocketIdMap.set(userId, new Set([usersDeviceSocket]));
     } else{
     //user had already joined from one client and now joining using another
-    client
+   // client
     userSocketIdMap.get(userId).add(usersDeviceSocket);
     }
 }
