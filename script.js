@@ -3,28 +3,16 @@ const helper = require('./helpers/db_helper');
 var moment = require('moment-timezone');
 var connectedUsers = {}; 
 
-const userSocketIdMap = new Map(); //a map of online usernames and their clients
-
-
-
 // socket connection
 io.on('connection', socket => {
     // if connected, emit to socket saying connected with the socket.id
     socket.emit('connected', socket.id);
     /*--------------------------New User - Start---------------------------*/
     // when user added, store the socket information in connectedUsers
-    socket.on('add-user', (clientInfo) => {
-        if(clientInfo) {
-            socket.user_id = clientInfo.userId;
-            connectedUsers[clientInfo.userId] = socket;
-            
-           
-           
-             console.log(clientInfo.userId);
-            //add client to online users list
-            var uId = (clientInfo.userId).toString();
-            console.log(uId);
-            addClientToMap(uId, clientInfo.userSocket);
+    socket.on('add-user', userId => {
+        if(userId) {
+            socket.user_id = userId;
+            connectedUsers[userId] = socket;
             // console.log('Added: ' + socket.user_id );
             // console.log(connectedUsers[userId]);
         }
@@ -43,21 +31,10 @@ io.on('connection', socket => {
             }
             });
                 
-        if(message.senderId!= undefined && message.receiverId != undefined) {
-            // && connectedUsers[message.receiverId] != undefined) {
+        if(message.senderId!= undefined && message.receiverId != undefined && connectedUsers[message.receiverId] != undefined) {
             // console.log(connectedUsers[message.receiverId].user_id);
             var cstTimeNow = moment().tz('America/Chicago').format('D MMM YYYY, h:mm a');
-            // connectedUsers[message.receiverId].emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: cstTimeNow});
-             
-            //get all clients (sockets) of recipient
-            let recipientSocketIds = userSocketIdMap.get((message.senderId).toString());
-            //console.log(message.receiverId);
-            console.log(recipientSocketIds);
-            if(recipientSocketIds != undefined && recipientSocketIds.length > 0) {
-                for (let recipientSocket of recipientSocketIds) {
-                    io.to(recipientSocket).emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: cstTimeNow});
-                }
-            }
+            connectedUsers[message.receiverId].emit('message', {msg: message.text, senderId: message.senderId, receiverId: message.receiverId, createdAt: cstTimeNow});
         }
     });
     socket.on('start typing', roomId => {
@@ -77,36 +54,15 @@ io.on('connection', socket => {
     });
 
     // when the user disconnects.. perform this
-    socket.on('disconnect', (clientInfo) => {
+    socket.on('disconnect', () => {
 
         console.log('deconnection');
-        //remove this client from online list
-        removeClientFromMap(clientInfo.userId, clientInfo.userSocket);
+        numUsers--;
+
+
+
     });
 });
 
 
-//
-function addClientToMap(userId, usersDeviceSocket){
-    var udId = userId.toString();
-    if (!userSocketIdMap.has(udId)) {
-       // console.log('if'+ userId);
-    //when user is joining first time
-    userSocketIdMap.set(udId, usersDeviceSocket);
-    } else if(userSocketIdMap.get(udId) != undefined){
-    //user had already joined from one client and now joining using another client
-      // console.log('else'+userId);
-        userSocketIdMap.get(udId).add(udId, usersDeviceSocket);
-    }
-}
-
-function removeClientFromMap(userId, usersDeviceSocket){
-    if (userSocketIdMap.has(userId)) {
-    let userSocketIdSet = userSocketIdMap.get(userId);
-    userSocketIdSet.delete(usersDeviceSocket);
-    //if there are no clients for a user, remove that user from online list (map)
-    if (userSocketIdSet.size ==0 ) {
-    userSocketIdMap.delete(userId);
-    }
-    }
-}
+ 
